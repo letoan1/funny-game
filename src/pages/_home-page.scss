@@ -1,0 +1,11 @@
+.home-page {
+    text-align: center;
+}
+
+.btn-start {
+    padding: 10px 30px;
+    & a {
+        color: #000;
+        text-decoration: none;
+    }
+}

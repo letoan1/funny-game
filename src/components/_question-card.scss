@@ -1,0 +1,44 @@
+.container {
+    margin-top: 200px;
+
+    .question-card {
+        max-width: 940px;
+        margin: 0 auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+
+        & .question-card__top {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+        }
+
+        & .question-title {
+            text-align: center;
+        }
+
+        & .answers,
+        & .btn-submit {
+            display: flex;
+            flex-direction: column;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            gap: 20px;
+
+            & .btn-answer {
+                padding: 10px;
+                display: flex;
+            }
+        }
+
+        & .btn-submit {
+            margin-top: 30px;
+            padding: 10px 30px;
+        }
+    }
+
+    & .input-radio {
+        margin-right: 20px;
+    }
+}
