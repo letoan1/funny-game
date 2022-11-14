@@ -1,15 +1,40 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { Players } from '../interface';
 import './_create-game.scss';
 
 interface Props {
-    player1: string;
-    setPlayer1: React.Dispatch<React.SetStateAction<string>>;
-    handleCreateGame: (e: React.FormEvent) => void;
+    players: Players[];
+    setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
 }
 
 const CreateGame: React.FC<Props> = (props) => {
-    const { player1, setPlayer1, handleCreateGame } = props;
+    const { setPlayers } = props;
+    const [player1, setPlayer1] = React.useState<string>('');
+    const [player2, setPlayer2] = React.useState<string>('');
+
+    const handleCreateGame = () => {
+        if (player1 && player2) {
+            setPlayers([
+                {
+                    id: 1,
+                    name: player1,
+                    answers: [],
+                    result: [],
+                    times: [],
+                },
+                {
+                    id: 2,
+                    name: player2,
+                    answers: [],
+                    result: [],
+                    times: [],
+                },
+            ]);
+            history.push('/match');
+        }
+    };
+
     const history = useHistory();
 
     const cancelCreateGame = () => {
@@ -23,7 +48,7 @@ const CreateGame: React.FC<Props> = (props) => {
                     <h2>Create Game</h2>
                     <h2 onClick={cancelCreateGame}>X</h2>
                 </div>
-                <form action="#" onSubmit={(e) => handleCreateGame(e)}>
+                <form action="#" onSubmit={handleCreateGame}>
                     <label htmlFor="#">Player 1</label>
                     <input
                         type="text"
@@ -32,7 +57,17 @@ const CreateGame: React.FC<Props> = (props) => {
                         onChange={(e) => setPlayer1(e.target.value)}
                     />
                     <br />
-                    <button type="submit">Submit</button>
+                    <label htmlFor="#">Player 2</label>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        value={player2}
+                        onChange={(e) => setPlayer2(e.target.value)}
+                    />
+                    <br />
+                    <button type="submit" className="btn btn-create">
+                        Submit
+                    </button>
                 </form>
             </div>
         </div>

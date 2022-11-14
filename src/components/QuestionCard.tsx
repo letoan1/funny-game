@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Question, QuestionState } from '../interface';
+import { Players, Question, QuestionState } from '../interface';
 import { shuffleArray } from '../utils';
 import './_question-card.scss';
 
@@ -18,9 +18,10 @@ interface Props {
     setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
     setNumber: React.Dispatch<React.SetStateAction<number>>;
     checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    score: number;
     gameOver: boolean;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
+    turn: number;
+    setTurn: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const QuestionCard: React.FC<Props> = (props) => {
@@ -34,11 +35,10 @@ const QuestionCard: React.FC<Props> = (props) => {
         setGameOver,
         setNumber,
         checkAnswer,
-        score,
-        gameOver,
-        setTimeFinish,
+        turn,
+        setTurn,
     } = props;
-    const [count, setCount] = React.useState<number>(100000);
+    const [count, setCount] = React.useState<number>(10);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     const nextQuestion = () => {
@@ -81,6 +81,7 @@ const QuestionCard: React.FC<Props> = (props) => {
 
     return (
         <div className="container">
+
             <div className="question-card">
                 <div className="question-card__top">
                     <p>
@@ -92,17 +93,16 @@ const QuestionCard: React.FC<Props> = (props) => {
                 <div className="answers">
                     {!isLoading &&
                         answers?.map((answer, index) => (
-                            <button className="btn btn-answer" key={index} onClick={checkAnswer} value={answer}>
+                            <button className="btn btn-answer" key={index} value={answer} onClick={checkAnswer}>
                                 <>
                                     <input
                                         className="input-radio"
                                         type="radio"
                                         id={answer}
-                                        name="quiz"
                                         value={answer}
+                                        name="quiz"
                                     />
                                       <label htmlFor={answer}>{answer}</label>
-                                    <br></br>
                                 </>
                             </button>
                         ))}

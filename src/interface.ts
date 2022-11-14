@@ -1,9 +1,10 @@
 export interface Players {
     id: number;
     name: string;
-    score?: number;
+    answers: string[];
+    result: string[];
+    times: number[];
 }
-
 export interface Question {
     category: string;
     correct_answer: string;
@@ -12,7 +13,11 @@ export interface Question {
     question: string;
     type: string;
 }
-
 export interface QuestionState extends Question {
     answers: string[];
+}
+
+export interface Result {
+    id: number;
+    score: number;
 }

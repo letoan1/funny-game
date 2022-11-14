@@ -1,6 +1,6 @@
 import React from 'react';
 import QuestionCard from '../components/QuestionCard';
-import { QuestionState } from '../interface';
+import { Players, QuestionState, Result } from '../interface';
 
 interface Props {
     setListQuestion: React.Dispatch<React.SetStateAction<QuestionState[]>>;
@@ -13,9 +13,13 @@ interface Props {
     setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
     setNumber: React.Dispatch<React.SetStateAction<number>>;
     checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    score: number;
     gameOver: boolean;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
+    turn: number;
+    setTurn: React.Dispatch<React.SetStateAction<number>>;
+    result: Result[];
+    setResult: React.Dispatch<React.SetStateAction<Result[]>>;
+    players: Players[];
 }
 
 const QuizGame: React.FC<Props> = (props) => {
@@ -25,17 +29,21 @@ const QuizGame: React.FC<Props> = (props) => {
         question,
         answers,
         number,
-        userAnswer,
         questionNumber,
         setGameOver,
         setNumber,
         checkAnswer,
-        score,
         gameOver,
-        setTimeFinish,
+        setPlayers,
+        turn,
+        setTurn,
+        players,
     } = props;
     return (
         <div>
+            <h1 style={{ textAlign: 'center' }}>
+                {turn === 1 ? `Player: ${players[0].name}` : `Player: ${players[1].name}`}
+            </h1>
             <QuestionCard
                 answers={answers}
                 question={question}
@@ -46,9 +54,10 @@ const QuizGame: React.FC<Props> = (props) => {
                 setGameOver={setGameOver}
                 setNumber={setNumber}
                 checkAnswer={checkAnswer}
-                score={score}
                 gameOver={gameOver}
-                setTimeFinish={setTimeFinish}
+                setPlayers={setPlayers}
+                turn={turn}
+                setTurn={setTurn}
             />
         </div>
     );

@@ -1,20 +1,28 @@
 import React from 'react';
+import { AnswerObject } from '../App';
 import { Players } from '../interface';
 import './_result.scss';
 
 interface Props {
-    listPlayer: Players[];
+    players: Players[];
     score: number;
     timeFinish: number;
     setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    turn: number;
 }
 
 const ResultPage: React.FC<Props> = (props) => {
-    const { listPlayer, score, timeFinish } = props;
+    const { timeFinish } = props;
 
     const dataResult = JSON.parse(localStorage.getItem('player') || '');
+    const scoreLocal = JSON.parse(localStorage.getItem('result') || '');
+    const [searchField, setSearchFeild] = React.useState<string>('');
+    const [searchArr, setSearchArr] = React.useState<string[]>([]);
 
-    console.log(dataResult);
+    const searchResult = () => {
+        const haveWord = dataResult.filter((data: any) => data.name.toLowerCase().includes(searchField.toLowerCase()));
+        setSearchArr(haveWord);
+    };
 
     return (
         <div className="container">
@@ -24,8 +32,17 @@ const ResultPage: React.FC<Props> = (props) => {
                     <button className="btn btn-finally">Finally</button>
                 </div>
                 <div className="search-input">
-                    <input type="search" name="search" id="search" placeholder="Search player" />
-                    <button className="btn btn-search">Search</button>
+                    <input
+                        type="search"
+                        name="search"
+                        id="search"
+                        placeholder="Search player"
+                        value={searchField}
+                        onChange={(e) => setSearchFeild(e.target.value)}
+                    />
+                    <button className="btn btn-search" onClick={searchResult}>
+                        Search
+                    </button>
                 </div>
                 <table>
                     <thead>
@@ -37,17 +54,33 @@ const ResultPage: React.FC<Props> = (props) => {
                             <th>Time Finish</th>
                         </tr>
                     </thead>
-                    {dataResult?.map((player: any) => (
-                        <tbody key={player.id}>
-                            <tr>
-                                <td>{player.name}</td>
-                                <td>{score}</td>
-                                <td>Fake</td>
-                                <td>Fake</td>
-                                <td>{timeFinish}s</td>
-                            </tr>
-                        </tbody>
-                    ))}
+                    {searchField !== '' && !!searchArr.length ? (
+                        searchArr?.map((player: any) => (
+                            <tbody key={player.id}>
+                                <tr>
+                                    <td>{player.name}</td>
+                                    <td>{scoreLocal.forEach((score: any) => score.score)}</td>
+                                    <td>{player.answers.join(' - ')}</td>
+                                    <td>{player.result.join(' - ')}</td>
+                                    <td>{timeFinish}s</td>
+                                </tr>
+                            </tbody>
+                        ))
+                    ) : searchField === '' ? (
+                        dataResult?.map((player: any) => (
+                            <tbody key={player.id}>
+                                <tr>
+                                    <td>{player.name}</td>
+                                    <td>{scoreLocal.map((score: any) => score.score)[0]}</td>
+                                    <td>{player.answers.join(' - ')}</td>
+                                    <td>{player.result.join(' - ')}</td>
+                                    <td>{timeFinish}s</td>
+                                </tr>
+                            </tbody>
+                        ))
+                    ) : (
+                        <p>Opps ! No search results...</p>
+                    )}
                 </table>
             </div>
         </div>
