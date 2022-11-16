@@ -1,6 +1,6 @@
 import React from 'react';
 import QuestionCard from '../components/QuestionCard';
-import { Players, QuestionState, Result } from '../interface';
+import { Players, QuestionState } from '../interface';
 
 interface Props {
     setListQuestion: React.Dispatch<React.SetStateAction<QuestionState[]>>;
@@ -17,9 +17,9 @@ interface Props {
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
-    result: Result[];
-    setResult: React.Dispatch<React.SetStateAction<Result[]>>;
     players: Players[];
+    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    timeFinish: number;
 }
 
 const QuizGame: React.FC<Props> = (props) => {
@@ -38,6 +38,8 @@ const QuizGame: React.FC<Props> = (props) => {
         turn,
         setTurn,
         players,
+        setTimeFinish,
+        timeFinish,
     } = props;
     return (
         <div>
@@ -58,6 +60,8 @@ const QuizGame: React.FC<Props> = (props) => {
                 setPlayers={setPlayers}
                 turn={turn}
                 setTurn={setTurn}
+                setTimeFinish={setTimeFinish}
+                timeFinish={timeFinish}
             />
         </div>
     );

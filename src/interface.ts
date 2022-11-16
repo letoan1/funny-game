@@ -3,7 +3,8 @@ export interface Players {
     name: string;
     answers: string[];
     result: string[];
-    times: number[];
+    times: number;
+    score: number;
 }
 export interface Question {
     category: string;
@@ -15,9 +16,4 @@ export interface Question {
 }
 export interface QuestionState extends Question {
     answers: string[];
-}
-
-export interface Result {
-    id: number;
-    score: number;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { AnswerObject } from '../App';
 import { Players } from '../interface';
 import './_result.scss';
@@ -9,13 +10,16 @@ interface Props {
     timeFinish: number;
     setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
     turn: number;
+    setTurn: React.Dispatch<React.SetStateAction<number>>;
+    setUserAnswer: React.Dispatch<React.SetStateAction<AnswerObject[]>>;
+    gameOver: boolean;
 }
 
 const ResultPage: React.FC<Props> = (props) => {
     const { timeFinish } = props;
+    const history = useHistory();
 
-    const dataResult = JSON.parse(localStorage.getItem('player') || '');
-    const scoreLocal = JSON.parse(localStorage.getItem('result') || '');
+    const dataResult = JSON.parse(localStorage.getItem('players') || '');
     const [searchField, setSearchFeild] = React.useState<string>('');
     const [searchArr, setSearchArr] = React.useState<string[]>([]);
 
@@ -24,12 +28,18 @@ const ResultPage: React.FC<Props> = (props) => {
         setSearchArr(haveWord);
     };
 
+    const visitToWinner = () => {
+        history.push('/winner');
+    };
+
     return (
         <div className="container">
             <div className="result-page">
                 <div className="result-page__top">
                     <h2>Results Game</h2>
-                    <button className="btn btn-finally">Finally</button>
+                    <button className="btn btn-finally" onClick={visitToWinner}>
+                        Finally
+                    </button>
                 </div>
                 <div className="search-input">
                     <input
@@ -59,7 +69,7 @@ const ResultPage: React.FC<Props> = (props) => {
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
-                                    <td>{scoreLocal.forEach((score: any) => score.score)}</td>
+                                    <td>{player.score}</td>
                                     <td>{player.answers.join(' - ')}</td>
                                     <td>{player.result.join(' - ')}</td>
                                     <td>{timeFinish}s</td>
@@ -71,7 +81,7 @@ const ResultPage: React.FC<Props> = (props) => {
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
-                                    <td>{scoreLocal.map((score: any) => score.score)[0]}</td>
+                                    <td>{player.score}</td>
                                     <td>{player.answers.join(' - ')}</td>
                                     <td>{player.result.join(' - ')}</td>
                                     <td>{timeFinish}s</td>

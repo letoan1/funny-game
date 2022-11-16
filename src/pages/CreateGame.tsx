@@ -6,10 +6,14 @@ import './_create-game.scss';
 interface Props {
     players: Players[];
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
+    turn: number;
+    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    timeFinish: number;
+    gameOver: boolean;
 }
 
 const CreateGame: React.FC<Props> = (props) => {
-    const { setPlayers } = props;
+    const { setPlayers, turn, setTimeFinish, timeFinish, gameOver } = props;
     const [player1, setPlayer1] = React.useState<string>('');
     const [player2, setPlayer2] = React.useState<string>('');
 
@@ -21,14 +25,16 @@ const CreateGame: React.FC<Props> = (props) => {
                     name: player1,
                     answers: [],
                     result: [],
-                    times: [],
+                    times: 0,
+                    score: 0,
                 },
                 {
                     id: 2,
                     name: player2,
                     answers: [],
                     result: [],
-                    times: [],
+                    times: 0,
+                    score: 0,
                 },
             ]);
             history.push('/match');

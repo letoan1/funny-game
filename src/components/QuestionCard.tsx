@@ -22,6 +22,8 @@ interface Props {
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
+    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    timeFinish: number;
 }
 
 const QuestionCard: React.FC<Props> = (props) => {
@@ -37,19 +39,26 @@ const QuestionCard: React.FC<Props> = (props) => {
         checkAnswer,
         turn,
         setTurn,
+        gameOver,
+        setTimeFinish,
+        timeFinish,
     } = props;
     const [count, setCount] = React.useState<number>(10);
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     const nextQuestion = () => {
         const nextQ = number + 1;
-
         if (nextQ === TOTAL_QUESTIONS) {
-            setGameOver(true);
-            history.push('/result');
+            setTurn(2);
+            history.push('/match');
         } else {
             setNumber(nextQ);
             setCount(10);
+        }
+
+        if (nextQ === TOTAL_QUESTIONS && turn === 2) {
+            setGameOver(true);
+            history.push('/result');
         }
     };
 
@@ -71,7 +80,7 @@ const QuestionCard: React.FC<Props> = (props) => {
         const interval = setInterval(() => {
             setCount(count - 1);
             if (count <= 0) {
-                setGameOver(true);
+                // setGameOver(true);
                 nextQuestion();
             }
         }, 1000);
@@ -81,7 +90,6 @@ const QuestionCard: React.FC<Props> = (props) => {
 
     return (
         <div className="container">
-
             <div className="question-card">
                 <div className="question-card__top">
                     <p>
