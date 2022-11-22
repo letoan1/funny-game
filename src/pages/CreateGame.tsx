@@ -4,16 +4,11 @@ import { Players } from '../interface';
 import './_create-game.scss';
 
 interface Props {
-    players: Players[];
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
-    turn: number;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
-    timeFinish: number;
-    gameOver: boolean;
 }
 
 const CreateGame: React.FC<Props> = (props) => {
-    const { setPlayers, turn, setTimeFinish, timeFinish, gameOver } = props;
+    const { setPlayers } = props;
     const [player1, setPlayer1] = React.useState<string>('');
     const [player2, setPlayer2] = React.useState<string>('');
 

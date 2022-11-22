@@ -39,13 +39,19 @@ const App: React.FC = () => {
     const [number, setNumber] = React.useState<number>(0);
     const [userAnswer, setUserAnswer] = React.useState<AnswerObject[]>([]);
     const [gameOver, setGameOver] = React.useState<boolean>(false);
-    const [timeFinish, setTimeFinish] = React.useState<number>(0);
+    const [timeFinish, setTimeFinish] = React.useState<number[]>([]);
     const [turn, setTurn] = React.useState<number>(1);
     const [score, setScore] = React.useState<number>(0);
+    const [count, setCount] = React.useState<number>(10);
 
     const removeDuplicates = (arr: any) => {
         return arr.filter((item: string, index: number) => arr.indexOf(item) === index);
     };
+
+    const endtime = [...timeFinish];
+    const finallyTimes = endtime.reduce((prev, curr) => {
+        return prev + curr;
+    }, 0);
 
     const checkAnswer = (e: any) => {
         if (!gameOver) {
@@ -69,8 +75,6 @@ const App: React.FC = () => {
                 correctAnswer: listQuestion[number].correct_answer,
             };
 
-            setUserAnswer((p) => [...p, answerObject]);
-
             if (turn === 1) {
                 setPlayers([
                     {
@@ -78,7 +82,7 @@ const App: React.FC = () => {
                         name: players[0].name,
                         answers: [...finalAnswer],
                         result: [...finalCorrect],
-                        times: timeFinish,
+                        times: finallyTimes,
                         score: score,
                     },
                     {
@@ -107,11 +111,13 @@ const App: React.FC = () => {
                         name: players[1].name,
                         answers: [...finalAnswer],
                         result: [...finalCorrect],
-                        times: timeFinish,
+                        times: finallyTimes,
                         score: score,
                     },
                 ]);
             }
+
+            setUserAnswer((p) => [...p, answerObject]);
         }
     };
 
@@ -121,14 +127,7 @@ const App: React.FC = () => {
         <div className="App">
             <Switch>
                 <Route path="/create">
-                    <CreateGame
-                        players={players}
-                        setPlayers={setPlayers}
-                        turn={turn}
-                        setTimeFinish={setTimeFinish}
-                        timeFinish={timeFinish}
-                        gameOver={gameOver}
-                    />
+                    <CreateGame setPlayers={setPlayers} />
                 </Route>
                 <Route path="/question">
                     <QuizGame
@@ -137,18 +136,18 @@ const App: React.FC = () => {
                         questionNumber={number + 1}
                         question={listQuestion[number]?.question}
                         answers={listQuestion[number]?.answers}
-                        userAnswer={userAnswer ? userAnswer[number] : undefined}
                         number={number}
                         setGameOver={setGameOver}
                         setNumber={setNumber}
                         checkAnswer={checkAnswer}
-                        gameOver={gameOver}
                         setPlayers={setPlayers}
                         turn={turn}
                         setTurn={setTurn}
                         players={players}
                         setTimeFinish={setTimeFinish}
                         timeFinish={timeFinish}
+                        count={count}
+                        setCount={setCount}
                     />
                 </Route>
                 <Route path="/result">

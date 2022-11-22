@@ -9,7 +9,7 @@ interface Props {
     setTurn: React.Dispatch<React.SetStateAction<number>>;
     gameOver: boolean;
     setScore: React.Dispatch<React.SetStateAction<number>>;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const Match: React.FC<Props> = (props) => {
@@ -19,10 +19,10 @@ const Match: React.FC<Props> = (props) => {
     React.useEffect(() => {
         const timeout = setTimeout(() => {
             if (turn === 2) {
+                setScore(0);
                 setNumber(0);
                 setUserAnswer([]);
-                setScore(0);
-                setTimeFinish(0);
+                setTimeFinish([]);
             }
             history.push('/question');
         }, 2000);

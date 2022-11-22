@@ -1,14 +1,16 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { AnswerObject } from '../App';
+import { decodeHTMLentities } from '../components/QuestionCard';
 import { Players } from '../interface';
 import './_result.scss';
 
 interface Props {
     players: Players[];
     score: number;
-    timeFinish: number;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
+    timeFinish: number[];
+    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
     setUserAnswer: React.Dispatch<React.SetStateAction<AnswerObject[]>>;
@@ -70,9 +72,9 @@ const ResultPage: React.FC<Props> = (props) => {
                                 <tr>
                                     <td>{player.name}</td>
                                     <td>{player.score}</td>
-                                    <td>{player.answers.join(' - ')}</td>
-                                    <td>{player.result.join(' - ')}</td>
-                                    <td>{timeFinish}s</td>
+                                    <td>{decodeHTMLentities(player.answers.join(' - '))}</td>
+                                    <td>{decodeHTMLentities(player.result.join(' - '))}</td>
+                                    <td>{player.times}s</td>
                                 </tr>
                             </tbody>
                         ))
@@ -84,7 +86,7 @@ const ResultPage: React.FC<Props> = (props) => {
                                     <td>{player.score}</td>
                                     <td>{player.answers.join(' - ')}</td>
                                     <td>{player.result.join(' - ')}</td>
-                                    <td>{timeFinish}s</td>
+                                    <td>{player.times}s</td>
                                 </tr>
                             </tbody>
                         ))

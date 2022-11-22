@@ -18,13 +18,17 @@ interface Props {
     setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
     setNumber: React.Dispatch<React.SetStateAction<number>>;
     checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    gameOver: boolean;
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
-    timeFinish: number;
+    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
+    timeFinish: number[];
+    count: number;
+    setCount: React.Dispatch<React.SetStateAction<number>>;
 }
+
+export const decodeHTMLentities = (rawHTML: string) =>
+    React.createElement('div', { dangerouslySetInnerHTML: { __html: rawHTML } });
 
 const QuestionCard: React.FC<Props> = (props) => {
     const history = useHistory();
@@ -39,11 +43,12 @@ const QuestionCard: React.FC<Props> = (props) => {
         checkAnswer,
         turn,
         setTurn,
-        gameOver,
         setTimeFinish,
         timeFinish,
+        count,
+        setCount,
     } = props;
-    const [count, setCount] = React.useState<number>(10);
+
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
     const nextQuestion = () => {
@@ -54,6 +59,7 @@ const QuestionCard: React.FC<Props> = (props) => {
         } else {
             setNumber(nextQ);
             setCount(10);
+            setTimeFinish([...timeFinish, 10 - count]);
         }
 
         if (nextQ === TOTAL_QUESTIONS && turn === 2) {
@@ -84,6 +90,7 @@ const QuestionCard: React.FC<Props> = (props) => {
                 nextQuestion();
             }
         }, 1000);
+
         return () => clearInterval(interval);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count, history, setGameOver]);
@@ -97,20 +104,18 @@ const QuestionCard: React.FC<Props> = (props) => {
                     </p>
                     {!isLoading ? <p>Time remaining: {count}</p> : null}
                 </div>
-                {isLoading ? <p>Loading Questions...</p> : <h1 className="question-title">{question}</h1>}
+                {isLoading ? (
+                    <p>Loading Questions...</p>
+                ) : (
+                    <h1 className="question-title">{decodeHTMLentities(question)}</h1>
+                )}
                 <div className="answers">
                     {!isLoading &&
                         answers?.map((answer, index) => (
                             <button className="btn btn-answer" key={index} value={answer} onClick={checkAnswer}>
                                 <>
-                                    <input
-                                        className="input-radio"
-                                        type="radio"
-                                        id={answer}
-                                        value={answer}
-                                        name="quiz"
-                                    />
-                                      <label htmlFor={answer}>{answer}</label>
+                                    <input className="input-radio" type="radio" id={answer} name="quiz" /> {' '}
+                                    <label htmlFor={answer}>{decodeHTMLentities(answer)}</label>
                                 </>
                             </button>
                         ))}

@@ -7,19 +7,19 @@ interface Props {
     listQuestion: QuestionState[];
     question: string;
     answers: string[];
-    userAnswer: any;
     questionNumber: number;
     number: number;
     setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
     setNumber: React.Dispatch<React.SetStateAction<number>>;
     checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    gameOver: boolean;
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
     turn: number;
     setTurn: React.Dispatch<React.SetStateAction<number>>;
     players: Players[];
-    setTimeFinish: React.Dispatch<React.SetStateAction<number>>;
-    timeFinish: number;
+    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
+    timeFinish: number[];
+    count: number;
+    setCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const QuizGame: React.FC<Props> = (props) => {
@@ -33,13 +33,14 @@ const QuizGame: React.FC<Props> = (props) => {
         setGameOver,
         setNumber,
         checkAnswer,
-        gameOver,
         setPlayers,
         turn,
         setTurn,
         players,
         setTimeFinish,
         timeFinish,
+        count,
+        setCount,
     } = props;
     return (
         <div>
@@ -56,12 +57,13 @@ const QuizGame: React.FC<Props> = (props) => {
                 setGameOver={setGameOver}
                 setNumber={setNumber}
                 checkAnswer={checkAnswer}
-                gameOver={gameOver}
                 setPlayers={setPlayers}
                 turn={turn}
                 setTurn={setTurn}
                 setTimeFinish={setTimeFinish}
                 timeFinish={timeFinish}
+                count={count}
+                setCount={setCount}
             />
         </div>
     );
