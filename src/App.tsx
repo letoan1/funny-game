@@ -44,18 +44,23 @@ const App: React.FC = () => {
     const [turn, setTurn] = React.useState<number>(1);
     const [score, setScore] = React.useState<number>(0);
     const [count, setCount] = React.useState<number>(10);
+    const [value, setValue] = React.useState<string>('');
     const TOTAL_QUESTIONS = 3;
-
-    // const removeDuplicates = (arr: any) => {
-    //     return arr.filter((item: string, index: number) => arr.indexOf(item) === index);
-    // };
 
     const endtime = [...timeFinish];
     const finallyTimes = endtime.reduce((prev, curr) => {
         return prev + curr;
     }, 0);
 
-    const nextQuestion = () => {
+    const answer = value;
+    const correct = listQuestion[number]?.correct_answer === answer;
+    React.useEffect(() => {
+        if (correct) {
+            setScore((prev) => prev + 1);
+        }
+    }, [correct]);
+
+    const nextQuestion = (): void => {
         const nextQ = number + 1;
         if (nextQ === TOTAL_QUESTIONS) {
             setTurn(2);
@@ -72,30 +77,17 @@ const App: React.FC = () => {
         }
     };
 
-    const loopAnswer = userAnswer.map((answer: any) => answer.answer);
-    const correctAnswers = userAnswer.map((answer: any) => answer.correctAnswer);
-    console.log('loopAnswer', loopAnswer);
-
     const checkAnswer = (e: any): void => {
         if (!gameOver) {
-            const answer = e.currentTarget.value;
-            const correct = listQuestion[number].correct_answer === answer;
-
-            // const finalAnswer = removeDuplicates(loopAnswer);
-            // console.log('finalAnswer', finalAnswer);
-
-            // const finalCorrect = removeDuplicates(correctAnswers);
-            // console.log('finalCorrect', finalCorrect);
-
-            if (correct) {
-                setScore((prev) => prev + 1);
-            }
+            const loopAnswer = userAnswer.map((answer: any) => answer.answer);
+            const correctAnswers = userAnswer.map((answer: any) => answer.correctAnswer);
+            const resultCorrect = listQuestion[number]?.correct_answer;
 
             const answerObject = {
-                question: listQuestion[number].question,
+                question: listQuestion[number]?.question,
                 answer,
                 correct,
-                correctAnswer: listQuestion[number].correct_answer,
+                correctAnswer: resultCorrect,
             };
 
             setUserAnswer((prev) => [...prev, answerObject]);
@@ -105,8 +97,8 @@ const App: React.FC = () => {
                     {
                         id: 1,
                         name: players[0].name,
-                        answers: [...loopAnswer],
-                        result: [...correctAnswers],
+                        answers: [...loopAnswer, answer],
+                        result: [...correctAnswers, resultCorrect],
                         times: finallyTimes,
                         score: score,
                     },
@@ -134,15 +126,15 @@ const App: React.FC = () => {
                     {
                         id: 2,
                         name: players[1].name,
-                        answers: [...loopAnswer],
-                        result: [...correctAnswers],
+                        answers: [...loopAnswer, answer],
+                        result: [...correctAnswers, resultCorrect],
                         times: finallyTimes,
                         score: score,
                     },
                 ]);
             }
-            nextQuestion();
         }
+        nextQuestion();
     };
 
     localStorage.setItem('players', JSON.stringify(players));
@@ -173,6 +165,8 @@ const App: React.FC = () => {
                         count={count}
                         setCount={setCount}
                         nextQuestion={nextQuestion}
+                        value={value}
+                        setValue={setValue}
                     />
                 </Route>
                 <Route path="/result">

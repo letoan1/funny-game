@@ -21,6 +21,8 @@ interface Props {
     count: number;
     setCount: React.Dispatch<React.SetStateAction<number>>;
     nextQuestion: () => void;
+    value: string;
+    setValue: React.Dispatch<React.SetStateAction<string>>
 }
 
 const QuizGame: React.FC<Props> = (props) => {
@@ -43,6 +45,8 @@ const QuizGame: React.FC<Props> = (props) => {
         count,
         setCount,
         nextQuestion,
+        value,
+        setValue
     } = props;
     return (
         <div>
@@ -67,6 +71,8 @@ const QuizGame: React.FC<Props> = (props) => {
                 count={count}
                 setCount={setCount}
                 nextQuestion={nextQuestion}
+                value={value}
+                        setValue={setValue}
             />
         </div>
     );

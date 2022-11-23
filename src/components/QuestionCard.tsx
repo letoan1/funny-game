@@ -24,6 +24,8 @@ interface Props {
     count: number;
     setCount: React.Dispatch<React.SetStateAction<number>>;
     nextQuestion: () => void;
+    value: string;
+    setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const decodeHTMLentities = (rawHTML: string) =>
@@ -47,10 +49,11 @@ const QuestionCard: React.FC<Props> = (props) => {
         count,
         setCount,
         nextQuestion,
+        value,
+        setValue,
     } = props;
 
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-    const [value, setValue] = React.useState<string>('');
 
     React.useEffect(() => {
         const listAnswers = async () => {
@@ -96,7 +99,12 @@ const QuestionCard: React.FC<Props> = (props) => {
                 <div className="answers">
                     {!isLoading &&
                         answers?.map((answer, index) => (
-                            <button className="btn btn-answer" key={index} value={answer}>
+                            <button
+                                className="btn btn-answer"
+                                key={index}
+                                value={answer}
+                                onClick={() => setValue(answer)}
+                            >
                                 <>
                                     <input
                                         className="input-radio"
@@ -104,7 +112,6 @@ const QuestionCard: React.FC<Props> = (props) => {
                                         id={answer}
                                         name="quiz"
                                         value={answer}
-                                        onChange={() => setValue(answer)}
                                     />
                                       <label htmlFor={answer}>{decodeHTMLentities(answer)}</label>
                                 </>
