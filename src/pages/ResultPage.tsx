@@ -60,9 +60,9 @@ const ResultPage: React.FC<Props> = (props) => {
                     <thead>
                         <tr>
                             <th>Player</th>
-                            <th>Score</th>
                             <th>Answers</th>
                             <th>Results</th>
+                            <th>Score</th>
                             <th>Time Finish</th>
                         </tr>
                     </thead>
@@ -71,9 +71,9 @@ const ResultPage: React.FC<Props> = (props) => {
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
-                                    <td>{player.score}</td>
                                     <td>{decodeHTMLentities(player.answers.join(' - '))}</td>
                                     <td>{decodeHTMLentities(player.result.join(' - '))}</td>
+                                    <td>{player.score}</td>
                                     <td>{player.times}s</td>
                                 </tr>
                             </tbody>
@@ -83,9 +83,9 @@ const ResultPage: React.FC<Props> = (props) => {
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
-                                    <td>{player.score}</td>
                                     <td>{player.answers.join(' - ')}</td>
                                     <td>{player.result.join(' - ')}</td>
+                                    <td>{player.score}</td>
                                     <td>{player.times}s</td>
                                 </tr>
                             </tbody>
