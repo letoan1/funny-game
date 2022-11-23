@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Players, QuestionState } from './interface';
 import CreateGame from './pages/CreateGame';
 import HomePage from './pages/HomePage';
@@ -16,6 +16,7 @@ export interface AnswerObject {
 }
 
 const App: React.FC = () => {
+    const history = useHistory();
     const [players, setPlayers] = React.useState<Players[]>([
         {
             id: 1,
@@ -43,26 +44,48 @@ const App: React.FC = () => {
     const [turn, setTurn] = React.useState<number>(1);
     const [score, setScore] = React.useState<number>(0);
     const [count, setCount] = React.useState<number>(10);
+    const TOTAL_QUESTIONS = 3;
 
-    const removeDuplicates = (arr: any) => {
-        return arr.filter((item: string, index: number) => arr.indexOf(item) === index);
-    };
+    // const removeDuplicates = (arr: any) => {
+    //     return arr.filter((item: string, index: number) => arr.indexOf(item) === index);
+    // };
 
     const endtime = [...timeFinish];
     const finallyTimes = endtime.reduce((prev, curr) => {
         return prev + curr;
     }, 0);
 
-    const checkAnswer = (e: any) => {
+    const nextQuestion = () => {
+        const nextQ = number + 1;
+        if (nextQ === TOTAL_QUESTIONS) {
+            setTurn(2);
+            history.push('/match');
+        } else {
+            setNumber(nextQ);
+            setCount(10);
+            setTimeFinish([...timeFinish, 10 - count]);
+        }
+
+        if (nextQ === TOTAL_QUESTIONS && turn === 2) {
+            setGameOver(true);
+            history.push('/result');
+        }
+    };
+
+    const loopAnswer = userAnswer.map((answer: any) => answer.answer);
+    const correctAnswers = userAnswer.map((answer: any) => answer.correctAnswer);
+    console.log('loopAnswer', loopAnswer);
+
+    const checkAnswer = (e: any): void => {
         if (!gameOver) {
             const answer = e.currentTarget.value;
             const correct = listQuestion[number].correct_answer === answer;
 
-            const loopAnswer = userAnswer.map((answer: any) => answer.answer);
-            const finalAnswer = removeDuplicates(loopAnswer);
+            // const finalAnswer = removeDuplicates(loopAnswer);
+            // console.log('finalAnswer', finalAnswer);
 
-            const correctAnswers = userAnswer.map((answer: any) => answer.correctAnswer);
-            const finalCorrect = removeDuplicates(correctAnswers);
+            // const finalCorrect = removeDuplicates(correctAnswers);
+            // console.log('finalCorrect', finalCorrect);
 
             if (correct) {
                 setScore((prev) => prev + 1);
@@ -75,13 +98,15 @@ const App: React.FC = () => {
                 correctAnswer: listQuestion[number].correct_answer,
             };
 
+            setUserAnswer((prev) => [...prev, answerObject]);
+
             if (turn === 1) {
                 setPlayers([
                     {
                         id: 1,
                         name: players[0].name,
-                        answers: [...finalAnswer],
-                        result: [...finalCorrect],
+                        answers: [...loopAnswer],
+                        result: [...correctAnswers],
                         times: finallyTimes,
                         score: score,
                     },
@@ -109,15 +134,14 @@ const App: React.FC = () => {
                     {
                         id: 2,
                         name: players[1].name,
-                        answers: [...finalAnswer],
-                        result: [...finalCorrect],
+                        answers: [...loopAnswer],
+                        result: [...correctAnswers],
                         times: finallyTimes,
                         score: score,
                     },
                 ]);
             }
-
-            setUserAnswer((p) => [...p, answerObject]);
+            nextQuestion();
         }
     };
 
@@ -148,6 +172,7 @@ const App: React.FC = () => {
                         timeFinish={timeFinish}
                         count={count}
                         setCount={setCount}
+                        nextQuestion={nextQuestion}
                     />
                 </Route>
                 <Route path="/result">

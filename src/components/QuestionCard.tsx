@@ -6,8 +6,6 @@ import { Players, Question, QuestionState } from '../interface';
 import { shuffleArray } from '../utils';
 import './_question-card.scss';
 
-const TOTAL_QUESTIONS = 3;
-
 interface Props {
     listQuestion: QuestionState[];
     setListQuestion: React.Dispatch<React.SetStateAction<QuestionState[]>>;
@@ -25,6 +23,7 @@ interface Props {
     timeFinish: number[];
     count: number;
     setCount: React.Dispatch<React.SetStateAction<number>>;
+    nextQuestion: () => void;
 }
 
 export const decodeHTMLentities = (rawHTML: string) =>
@@ -47,26 +46,11 @@ const QuestionCard: React.FC<Props> = (props) => {
         timeFinish,
         count,
         setCount,
+        nextQuestion,
     } = props;
 
     const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
-    const nextQuestion = () => {
-        const nextQ = number + 1;
-        if (nextQ === TOTAL_QUESTIONS) {
-            setTurn(2);
-            history.push('/match');
-        } else {
-            setNumber(nextQ);
-            setCount(10);
-            setTimeFinish([...timeFinish, 10 - count]);
-        }
-
-        if (nextQ === TOTAL_QUESTIONS && turn === 2) {
-            setGameOver(true);
-            history.push('/result');
-        }
-    };
+    const [value, setValue] = React.useState<string>('');
 
     React.useEffect(() => {
         const listAnswers = async () => {
@@ -100,7 +84,7 @@ const QuestionCard: React.FC<Props> = (props) => {
             <div className="question-card">
                 <div className="question-card__top">
                     <p>
-                        Question: {questionNumber} / {TOTAL_QUESTIONS}
+                        Question: {questionNumber} / {3}
                     </p>
                     {!isLoading ? <p>Time remaining: {count}</p> : null}
                 </div>
@@ -112,15 +96,22 @@ const QuestionCard: React.FC<Props> = (props) => {
                 <div className="answers">
                     {!isLoading &&
                         answers?.map((answer, index) => (
-                            <button className="btn btn-answer" key={index} value={answer} onClick={checkAnswer}>
+                            <button className="btn btn-answer" key={index} value={answer}>
                                 <>
-                                    <input className="input-radio" type="radio" id={answer} name="quiz" /> {' '}
-                                    <label htmlFor={answer}>{decodeHTMLentities(answer)}</label>
+                                    <input
+                                        className="input-radio"
+                                        type="radio"
+                                        id={answer}
+                                        name="quiz"
+                                        value={answer}
+                                        onChange={() => setValue(answer)}
+                                    />
+                                      <label htmlFor={answer}>{decodeHTMLentities(answer)}</label>
                                 </>
                             </button>
                         ))}
                 </div>
-                <button className="btn btn-submit" type="submit" onClick={nextQuestion}>
+                <button className="btn btn-submit" type="submit" value={value} onClick={checkAnswer}>
                     Submit
                 </button>
             </div>
