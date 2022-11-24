@@ -164,16 +164,7 @@ const App: React.FC = () => {
                     />
                 </Route>
                 <Route path="/result">
-                    <ResultPage
-                        players={players}
-                        score={score}
-                        turn={turn}
-                        timeFinish={timeFinish}
-                        setTimeFinish={setTimeFinish}
-                        setUserAnswer={setUserAnswer}
-                        gameOver={gameOver}
-                        setTurn={setTurn}
-                    />
+                    <ResultPage />
                 </Route>
                 <Route path="/match">
                     <Match

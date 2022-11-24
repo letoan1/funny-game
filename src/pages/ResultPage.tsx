@@ -1,32 +1,31 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AnswerObject } from '../App';
 import { decodeHTMLentities } from '../components/QuestionCard';
-import { Players } from '../interface';
 import './_result.scss';
 
-interface Props {
-    players: Players[];
-    score: number;
-    timeFinish: number[];
-    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
-    turn: number;
-    setTurn: React.Dispatch<React.SetStateAction<number>>;
-    setUserAnswer: React.Dispatch<React.SetStateAction<AnswerObject[]>>;
-    gameOver: boolean;
-}
-
-const ResultPage: React.FC<Props> = (props) => {
+const ResultPage: React.FC = () => {
     const history = useHistory();
+    const timingTimeoutRef = React.useRef<any>(null);
 
     const dataResult = JSON.parse(localStorage.getItem('players') || '');
     const [searchField, setSearchFeild] = React.useState<string>('');
     const [searchArr, setSearchArr] = React.useState<string[]>([]);
 
-    const searchResult = () => {
-        const haveWord = dataResult.filter((data: any) => data.name.toLowerCase().includes(searchField.toLowerCase()));
-        setSearchArr(haveWord);
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value;
+        setSearchFeild(value);
+
+        if (timingTimeoutRef.current) {
+            clearTimeout(timingTimeoutRef.current);
+        }
+
+        timingTimeoutRef.current = setTimeout(() => {
+            const searchResult = dataResult.filter((data: any) =>
+                data.name.toLowerCase().includes(value.toLowerCase()),
+            );
+            setSearchArr(searchResult);
+        }, 500);
     };
 
     const visitToWinner = () => {
@@ -49,11 +48,9 @@ const ResultPage: React.FC<Props> = (props) => {
                         id="search"
                         placeholder="Search player"
                         value={searchField}
-                        onChange={(e) => setSearchFeild(e.target.value)}
+                        onChange={handleSearch}
                     />
-                    <button className="btn btn-search" onClick={searchResult}>
-                        Search
-                    </button>
+                    <button className="btn btn-search">Search</button>
                 </div>
                 <table>
                     <thead>
@@ -65,8 +62,9 @@ const ResultPage: React.FC<Props> = (props) => {
                             <th>Time Finish</th>
                         </tr>
                     </thead>
-                    {searchField !== '' && !!searchArr.length ? (
-                        searchArr?.map((player: any) => (
+
+                    {searchField === '' && !!dataResult.length ? (
+                        dataResult?.map((player: any) => (
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
@@ -77,8 +75,8 @@ const ResultPage: React.FC<Props> = (props) => {
                                 </tr>
                             </tbody>
                         ))
-                    ) : searchField === '' ? (
-                        dataResult?.map((player: any) => (
+                    ) : !!searchArr.length ? (
+                        searchArr?.map((player: any) => (
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
@@ -93,7 +91,7 @@ const ResultPage: React.FC<Props> = (props) => {
                         <tbody>
                             <tr>
                                 <td colSpan={5} style={{ textAlign: 'center' }}>
-                                    Opps ! No search results...
+                                    Opps ! No search results
                                 </td>
                             </tr>
                         </tbody>
