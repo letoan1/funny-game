@@ -147,21 +147,15 @@ const App: React.FC = () => {
                 </Route>
                 <Route path="/question">
                     <QuizGame
-                        listQuestion={listQuestion}
                         setListQuestion={setListQuestion}
                         questionNumber={number + 1}
                         question={listQuestion[number]?.question}
                         answers={listQuestion[number]?.answers}
-                        number={number}
                         setGameOver={setGameOver}
-                        setNumber={setNumber}
                         checkAnswer={checkAnswer}
                         setPlayers={setPlayers}
                         turn={turn}
-                        setTurn={setTurn}
                         players={players}
-                        setTimeFinish={setTimeFinish}
-                        timeFinish={timeFinish}
                         count={count}
                         setCount={setCount}
                         nextQuestion={nextQuestion}

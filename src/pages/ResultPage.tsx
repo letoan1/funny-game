@@ -18,7 +18,6 @@ interface Props {
 }
 
 const ResultPage: React.FC<Props> = (props) => {
-    const { timeFinish } = props;
     const history = useHistory();
 
     const dataResult = JSON.parse(localStorage.getItem('players') || '');
@@ -83,15 +82,21 @@ const ResultPage: React.FC<Props> = (props) => {
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>
-                                    <td>{player.answers.join(' - ')}</td>
-                                    <td>{player.result.join(' - ')}</td>
+                                    <td>{decodeHTMLentities(player.answers.join(' - '))}</td>
+                                    <td>{decodeHTMLentities(player.result.join(' - '))}</td>
                                     <td>{player.score}</td>
                                     <td>{player.times}s</td>
                                 </tr>
                             </tbody>
                         ))
                     ) : (
-                        <p>Opps ! No search results...</p>
+                        <tbody>
+                            <tr>
+                                <td colSpan={5} style={{ textAlign: 'center' }}>
+                                    Opps ! No search results...
+                                </td>
+                            </tr>
+                        </tbody>
                     )}
                 </table>
             </div>

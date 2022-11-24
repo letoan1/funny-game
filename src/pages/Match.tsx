@@ -1,7 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AnswerObject } from '../App';
-
 interface Props {
     turn: number;
     setNumber: React.Dispatch<React.SetStateAction<number>>;

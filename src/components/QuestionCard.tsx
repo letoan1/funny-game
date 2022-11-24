@@ -2,25 +2,17 @@ import axios from 'axios';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Players, Question, QuestionState } from '../interface';
+import { Question, QuestionState } from '../interface';
 import { shuffleArray } from '../utils';
 import './_question-card.scss';
 
 interface Props {
-    listQuestion: QuestionState[];
-    setListQuestion: React.Dispatch<React.SetStateAction<QuestionState[]>>;
     answers: string[];
     question: string;
     questionNumber: number;
-    number: number;
+    setListQuestion: React.Dispatch<React.SetStateAction<QuestionState[]>>;
     setGameOver: React.Dispatch<React.SetStateAction<boolean>>;
-    setNumber: React.Dispatch<React.SetStateAction<number>>;
     checkAnswer: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
-    turn: number;
-    setTurn: React.Dispatch<React.SetStateAction<number>>;
-    setTimeFinish: React.Dispatch<React.SetStateAction<number[]>>;
-    timeFinish: number[];
     count: number;
     setCount: React.Dispatch<React.SetStateAction<number>>;
     nextQuestion: () => void;
@@ -37,15 +29,9 @@ const QuestionCard: React.FC<Props> = (props) => {
         answers,
         question,
         questionNumber,
-        number,
         setListQuestion,
         setGameOver,
-        setNumber,
         checkAnswer,
-        turn,
-        setTurn,
-        setTimeFinish,
-        timeFinish,
         count,
         setCount,
         nextQuestion,
