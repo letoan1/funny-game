@@ -15,6 +15,7 @@ const Match: React.FC<Props> = (props) => {
     const { turn, setNumber, setUserAnswer, setScore, setTimeFinish } = props;
     const history = useHistory();
 
+    window.localStorage.setItem('turn', JSON.stringify(turn));
     React.useEffect(() => {
         const timeout = setTimeout(() => {
             if (turn === 2) {
@@ -25,14 +26,15 @@ const Match: React.FC<Props> = (props) => {
             }
             history.push('/question');
         }, 2000);
-
         return () => clearTimeout(timeout);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const turnStorage = JSON.parse(`${window.localStorage.getItem('turn')}`);
+
     return (
         <div className="turn" style={{ textAlign: 'center', marginTop: '20%' }}>
-            <h1 style={{ fontSize: '60px' }}>{turn === 1 ? 'Match 1' : 'Match 2'}</h1>
+            <h1 style={{ fontSize: '60px' }}>{turnStorage === 1 ? 'Match 1' : 'Match 2'}</h1>
         </div>
     );
 };

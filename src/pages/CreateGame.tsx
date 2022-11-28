@@ -4,11 +4,12 @@ import { Players } from '../interface';
 import './_create-game.scss';
 
 interface Props {
+    players: Players[];
     setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
 }
 
 const CreateGame: React.FC<Props> = (props) => {
-    const { setPlayers } = props;
+    const { players, setPlayers } = props;
     const [player1, setPlayer1] = React.useState<string>('');
     const [player2, setPlayer2] = React.useState<string>('');
 
@@ -34,6 +35,14 @@ const CreateGame: React.FC<Props> = (props) => {
             ]);
             history.push('/match');
         }
+
+        if (!player1.trim() && !player2.trim()) {
+            alert('Please enter your name !');
+        } else if (player1 === player2) {
+            alert('Names cannot be the same !');
+            history.push('/create');
+        }
+        window.localStorage.setItem('players', JSON.stringify(players));
     };
 
     const history = useHistory();

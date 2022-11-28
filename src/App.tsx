@@ -43,7 +43,7 @@ const App: React.FC = () => {
     const [timeFinish, setTimeFinish] = React.useState<number[]>([]);
     const [turn, setTurn] = React.useState<number>(1);
     const [score, setScore] = React.useState<number>(0);
-    const [count, setCount] = React.useState<number>(10);
+    const [count, setCount] = React.useState<number>(JSON.parse(`${window.localStorage.getItem('count')}`) ?? 10);
     const [value, setValue] = React.useState<string>('');
     const TOTAL_QUESTIONS = 3;
 
@@ -54,6 +54,7 @@ const App: React.FC = () => {
 
     const answer = value;
     const correct = listQuestion[number]?.correct_answer === answer;
+
     React.useEffect(() => {
         if (correct) {
             setScore((prev) => prev + 1);
@@ -135,15 +136,17 @@ const App: React.FC = () => {
             }
         }
         nextQuestion();
+        window.localStorage.setItem('players', JSON.stringify(players));
     };
 
-    localStorage.setItem('players', JSON.stringify(players));
+    // React.useEffect(() => {
+    // }, [players]);
 
     return (
         <div className="App">
             <Switch>
                 <Route path="/create">
-                    <CreateGame setPlayers={setPlayers} />
+                    <CreateGame players={players} setPlayers={setPlayers} />
                 </Route>
                 <Route path="/question">
                     <QuizGame
@@ -164,7 +167,7 @@ const App: React.FC = () => {
                     />
                 </Route>
                 <Route path="/result">
-                    <ResultPage />
+                    <ResultPage players={players} setPlayers={setPlayers} />
                 </Route>
                 <Route path="/match">
                     <Match

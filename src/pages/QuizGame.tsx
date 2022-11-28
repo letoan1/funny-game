@@ -16,7 +16,7 @@ interface Props {
     setCount: React.Dispatch<React.SetStateAction<number>>;
     nextQuestion: () => void;
     value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>
+    setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const QuizGame: React.FC<Props> = (props) => {
@@ -33,12 +33,15 @@ const QuizGame: React.FC<Props> = (props) => {
         setCount,
         nextQuestion,
         value,
-        setValue
+        setValue,
     } = props;
+
+    const playerStorage = JSON.parse(`${window.localStorage.getItem('players')}`);
+
     return (
         <div>
             <h1 style={{ textAlign: 'center' }}>
-                {turn === 1 ? `Player: ${players[0].name}` : `Player: ${players[1].name}`}
+                {turn === 1 ? `Player: ${playerStorage[0].name}` : `Player: ${playerStorage[1].name}`}
             </h1>
             <QuestionCard
                 answers={answers}

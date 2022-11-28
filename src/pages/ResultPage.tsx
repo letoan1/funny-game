@@ -2,15 +2,25 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { decodeHTMLentities } from '../components/QuestionCard';
+import { Players } from '../interface';
 import './_result.scss';
 
-const ResultPage: React.FC = () => {
+interface Props {
+    players: Players[];
+    setPlayers: React.Dispatch<React.SetStateAction<Players[]>>;
+}
+
+const ResultPage: React.FC<Props> = (props) => {
+    const { players, setPlayers } = props;
     const history = useHistory();
     const timingTimeoutRef = React.useRef<any>(null);
 
-    const dataResult = JSON.parse(localStorage.getItem('players') || '');
+    React.useEffect(() => {
+        setPlayers(JSON.parse(`${window.localStorage.getItem('players')}`));
+    }, [setPlayers]);
+
     const [searchField, setSearchFeild] = React.useState<string>('');
-    const [searchArr, setSearchArr] = React.useState<string[]>([]);
+    const [searchArr, setSearchArr] = React.useState<any>(JSON.parse(`${window.localStorage.getItem('players')}`));
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
@@ -21,9 +31,7 @@ const ResultPage: React.FC = () => {
         }
 
         timingTimeoutRef.current = setTimeout(() => {
-            const searchResult = dataResult.filter((data: any) =>
-                data.name.toLowerCase().includes(value.toLowerCase()),
-            );
+            const searchResult = players.filter((data: any) => data.name.toLowerCase().includes(value.toLowerCase()));
             setSearchArr(searchResult);
         }, 500);
     };
@@ -63,8 +71,8 @@ const ResultPage: React.FC = () => {
                         </tr>
                     </thead>
 
-                    {searchField === '' && !!dataResult.length ? (
-                        dataResult?.map((player: any) => (
+                    {searchField === '' && !!players.length ? (
+                        players?.map((player: any) => (
                             <tbody key={player.id}>
                                 <tr>
                                     <td>{player.name}</td>

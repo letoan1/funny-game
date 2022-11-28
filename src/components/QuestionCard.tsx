@@ -68,6 +68,14 @@ const QuestionCard: React.FC<Props> = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [count, history, setGameOver]);
 
+    React.useEffect(() => {
+        localStorage.setItem('questionNumber', JSON.stringify(questionNumber));
+    }, [questionNumber]);
+
+    React.useEffect(() => {
+        localStorage.setItem('count', JSON.stringify(count));
+    }, [count]);
+
     return (
         <div className="container">
             <div className="question-card">
